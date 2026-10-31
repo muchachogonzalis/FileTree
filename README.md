@@ -28,21 +28,28 @@ TreeSize Free and Folder Size for Windows.
 
 ## Download
 
-Download `FileTree-<version>.zip` from [Releases](../../releases), unzip it and move `FileTree.app`
-to the Applications folder. FileTree needs macOS 14 Sonoma or later and runs natively on Apple
-silicon and Intel Macs.
+The built installation packages are in the [`dist`](dist) folder of this repository. Open one of
+them on GitHub and click the download button. Both hold the same app, which needs macOS 14 Sonoma or
+later and runs natively on Apple silicon and Intel Macs:
+
+- [`FileTree-1.0.dmg`](dist/FileTree-1.0.dmg) is a disk image: open it and drag FileTree onto the
+  Applications folder next to it.
+- [`FileTree-1.0.pkg`](dist/FileTree-1.0.pkg) is an installer that puts FileTree into the
+  Applications folder.
 
 ### First launch
 
-FileTree is not signed with an Apple Developer ID certificate, so macOS blocks it the first time
-you open it:
+FileTree is not signed with an Apple Developer ID certificate, so macOS blocks it once:
 
-1. Open FileTree. macOS says it cannot verify the app; click Done (or OK).
-2. Open System Settings → Privacy & Security, scroll down to the message about FileTree and click
-   **Open Anyway**. Confirm with your password or Touch ID.
+- **Installer:** opening `FileTree-1.0.pkg` is refused at first. Open System Settings → Privacy &
+  Security, scroll down to the message about the package and click **Open Anyway**, then go through
+  the installer. The installed app opens normally.
+- **Disk image:** after copying FileTree to Applications, open it. macOS says it cannot verify the
+  app; click Done (or OK). Then click **Open Anyway** in System Settings → Privacy & Security and
+  confirm with your password or Touch ID.
 
-From then on FileTree opens normally. On macOS 14 you can instead right-click the app and choose
-Open. The same can be done in Terminal:
+From then on FileTree opens normally. On macOS 14 you can instead right-click the package or the
+app and choose Open. For the app the same can be done in Terminal:
 
 ```bash
 xattr -dr com.apple.quarantine /Applications/FileTree.app
@@ -132,7 +139,7 @@ make            # builds build.noindex/FileTree.app
 make run        # builds and opens it
 make install    # copies it to /Applications (another folder: make install INSTALL_DIR=~/Applications)
 make test       # runs the tests
-make release    # builds the universal app (Apple silicon and Intel) and zips it into build.noindex/
+make release    # builds the universal app (Apple silicon and Intel) and the packages in dist/
 make clean      # removes the build files (.build, about 500 MB) and build.noindex/
 ```
 
