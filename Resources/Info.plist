@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>en</string>
+	<key>CFBundleDisplayName</key>
+	<string>FileTree</string>
+	<key>CFBundleExecutable</key>
+	<string>FileTree</string>
+	<key>CFBundleIconFile</key>
+	<string>AppIcon</string>
+	<key>CFBundleIdentifier</key>
+	<string>io.github.muchachogonzalis.FileTree</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>FileTree</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.0</string>
+	<key>CFBundleVersion</key>
+	<string>1</string>
+	<key>CFBundleDocumentTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>Folder</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+			<key>LSHandlerRank</key>
+			<string>Alternate</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>public.folder</string>
+				<string>public.volume</string>
+			</array>
+		</dict>
+	</array>
+	<key>LSApplicationCategoryType</key>
+	<string>public.app-category.utilities</string>
+	<key>LSMinimumSystemVersion</key>
+	<string>14.0</string>
+	<key>NSHighResolutionCapable</key>
+	<true/>
+	<key>NSHumanReadableCopyright</key>
+	<string>Shows which folders take up the space on your disks.</string>
+	<key>NSPrincipalClass</key>
+	<string>NSApplication</string>
+	<key>NSDesktopFolderUsageDescription</key>
+	<string>FileTree measures how much space folders take. It reads only names and sizes, never the contents of your files.</string>
+	<key>NSDocumentsFolderUsageDescription</key>
+	<string>FileTree measures how much space folders take. It reads only names and sizes, never the contents of your files.</string>
+	<key>NSDownloadsFolderUsageDescription</key>
+	<string>FileTree measures how much space folders take. It reads only names and sizes, never the contents of your files.</string>
+	<key>NSRemovableVolumesUsageDescription</key>
+	<string>FileTree measures how much space folders on this disk take. It reads only names and sizes, never the contents of your files.</string>
+	<key>NSNetworkVolumesUsageDescription</key>
+	<string>FileTree measures how much space folders on this network volume take. It reads only names and sizes, never the contents of your files.</string>
+</dict>
+</plist>
