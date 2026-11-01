@@ -34,16 +34,16 @@ The built installation packages are in the [`dist`](dist) folder of this reposit
 them on GitHub and click the download button. Both hold the same app, which needs macOS 14 Sonoma or
 later and runs natively on Apple silicon and Intel Macs:
 
-- [`FileTree-1.0.dmg`](dist/FileTree-1.0.dmg) is a disk image: open it and drag FileTree onto the
+- [`FileTree-1.0.1.dmg`](dist/FileTree-1.0.1.dmg) is a disk image: open it and drag FileTree onto the
   Applications folder next to it.
-- [`FileTree-1.0.pkg`](dist/FileTree-1.0.pkg) is an installer that puts FileTree into the
+- [`FileTree-1.0.1.pkg`](dist/FileTree-1.0.1.pkg) is an installer that puts FileTree into the
   Applications folder.
 
 ### First launch
 
 FileTree is not signed with an Apple Developer ID certificate, so macOS blocks it once:
 
-- **Installer:** opening `FileTree-1.0.pkg` is refused at first. Open System Settings → Privacy &
+- **Installer:** opening `FileTree-1.0.1.pkg` is refused at first. Open System Settings → Privacy &
   Security, scroll down to the message about the package and click **Open Anyway**, then go through
   the installer. The installed app opens normally.
 - **Disk image:** after copying FileTree to Applications, open it. macOS says it cannot verify the
