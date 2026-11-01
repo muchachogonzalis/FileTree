@@ -61,22 +61,31 @@ xattr -dr com.apple.quarantine /Applications/FileTree.app
 
 macOS keeps apps out of some folders: Mail, Messages, Safari, the containers of other apps. Without
 permission FileTree shows such folders with ⚠︎ and the note “protected by macOS”, and their size
-is not included in the total. macOS also asks for access to the Desktop, Documents and Downloads
-folders, once, and to the data of other apps. It remembers the answer about the data of other apps
-only until FileTree quits, so that question comes back at every launch. With Full Disk Access
-macOS asks nothing.
+is not included in the total.
+
+Without Full Disk Access macOS also asks for permission when a scan goes through your home folder:
+- once each for the Desktop, Documents and Downloads folders, your Photos library, Apple Music and
+  your media library, and the files of each cloud storage service (iCloud Drive, OneDrive and the
+  like);
+- at every launch for the data of other apps: macOS remembers this answer only until FileTree quits.
+
+With Full Disk Access macOS no longer asks about the Desktop, Documents and Downloads folders or
+about the data of other apps.
 
 To measure everything:
 1. Put FileTree in the Applications folder (when building from source: `make install`).
 2. Open System Settings → Privacy & Security → Full Disk Access. The Open Full Disk Access
    Settings… button in FileTree opens this page.
-3. Click + below the list (macOS asks for your password or Touch ID), choose
-   `/Applications/FileTree.app`, make sure its switch is on, and restart FileTree.
+3. Turn on the switch next to FileTree (macOS asks for your password or Touch ID). If FileTree is
+   not in the list, click + below the list, choose `/Applications/FileTree.app` and make sure its
+   switch is on.
+4. Restart FileTree.
 
 FileTree is signed ad hoc, without a developer certificate, so macOS treats every new version
-(a new release or a rebuild) as a different app and the permission has to be given again: remove
-the old FileTree entry with − and add the app again. If you have a certificate, build with
-`make install SIGN_IDENTITY="Apple Development: …"` and the permission survives rebuilds.
+(a new release or a rebuild) as a different app. For a new version macOS asks the questions above
+again, and Full Disk Access has to be given again: remove the old FileTree entry with − and add the
+app again. If you have a certificate, build with `make install SIGN_IDENTITY="Apple Development: …"`
+and the permissions survive rebuilds.
 
 Folders marked “no permission” belong to the system (root) or to another user, for example part
 of `/private/var/db`. Full Disk Access does not open them. They are usually small.
