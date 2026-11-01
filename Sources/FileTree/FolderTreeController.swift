@@ -229,51 +229,54 @@ final class FolderTreeController: NSViewController, NSOutlineViewDataSource, NSO
             menu.addItem(item)
         }
         if folder.status == .otherVolume {
-            add("Scan This Volume", #selector(scanSeparately(_:)))
+            add("Scan This Volume", #selector(scanClickedFolderSeparately(_:)))
             menu.addItem(.separator())
         }
-        add("Show in Finder", #selector(showInFinder(_:)))
-        add("Open", #selector(openFolder(_:)))
-        add("Copy Path", #selector(copyPath(_:)))
+        add("Show in Finder", #selector(showClickedFolderInFinder(_:)))
+        add("Open", #selector(openClickedFolder(_:)))
+        add("Copy Path", #selector(copyClickedFolderPath(_:)))
         guard folder.status != .otherVolume else { return }
         menu.addItem(.separator())
         // A rescan would leave it unopened again.
         if folder.status != .diskImageContents {
-            add("Rescan This Folder", #selector(rescan(_:)))
+            add("Rescan This Folder", #selector(rescanClickedFolder(_:)))
         }
         if folder.parent != nil {
-            add("Scan Only This Folder", #selector(scanSeparately(_:)))
+            add("Scan Only This Folder", #selector(scanClickedFolderSeparately(_:)))
         }
     }
 
     func validateMenuItem(_ menuItem: NSMenuItem) -> Bool {
         switch menuItem.action {
-        case #selector(rescan(_:)), #selector(scanSeparately(_:)): return !isBusy
+        case #selector(rescanClickedFolder(_:)), #selector(scanClickedFolderSeparately(_:)): return !isBusy
         default: return true
         }
     }
 
-    @objc private func showInFinder(_ sender: NSMenuItem) {
+    // Not named like the window's commands (rescan:, showInFinder:): this controller is on the responder chain
+    // and would take them from the menu bar and the toolbar whenever the tree has the focus.
+
+    @objc private func showClickedFolderInFinder(_ sender: NSMenuItem) {
         guard let folder = sender.representedObject as? FolderNode else { return }
         FileActions.reveal([folder.path])
     }
 
-    @objc private func openFolder(_ sender: NSMenuItem) {
+    @objc private func openClickedFolder(_ sender: NSMenuItem) {
         guard let folder = sender.representedObject as? FolderNode else { return }
         FileActions.open([folder.path])
     }
 
-    @objc private func copyPath(_ sender: NSMenuItem) {
+    @objc private func copyClickedFolderPath(_ sender: NSMenuItem) {
         guard let folder = sender.representedObject as? FolderNode else { return }
         FileActions.copy([folder.path])
     }
 
-    @objc private func rescan(_ sender: NSMenuItem) {
+    @objc private func rescanClickedFolder(_ sender: NSMenuItem) {
         guard let folder = sender.representedObject as? FolderNode else { return }
         delegate?.folderTree(self, rescan: folder)
     }
 
-    @objc private func scanSeparately(_ sender: NSMenuItem) {
+    @objc private func scanClickedFolderSeparately(_ sender: NSMenuItem) {
         guard let folder = sender.representedObject as? FolderNode else { return }
         delegate?.folderTree(self, scanSeparately: folder)
     }

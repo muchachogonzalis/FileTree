@@ -345,7 +345,7 @@ final class ContentsController: NSViewController, NSTableViewDataSource, NSTable
             add("Show in Tree", #selector(showInTree(_:)))
             menu.addItem(.separator())
         }
-        add("Show in Finder", #selector(showInFinder(_:)))
+        add("Show in Finder", #selector(revealItems(_:)))
         add("Open", #selector(openItems(_:)))
         add(targets.count == 1 ? "Copy Path" : "Copy Paths", #selector(copyPaths(_:)))
     }
@@ -356,7 +356,9 @@ final class ContentsController: NSViewController, NSTableViewDataSource, NSTable
         delegate?.contents(self, showInTree: folder)
     }
 
-    @objc private func showInFinder(_ sender: Any?) {
+    // Not showInFinder(_:), the window's command: this controller is on the responder chain and would take it
+    // from the menu bar and the toolbar, then reveal the rows of the last context menu instead of the selection.
+    @objc private func revealItems(_ sender: Any?) {
         FileActions.reveal(menuTargets.map(\.path))
     }
 

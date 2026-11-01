@@ -21,6 +21,8 @@ TreeSize Free and Folder Size for Windows.
   space taken, average size, largest file.
 - **Actions on folders and files:** Show in Finder, Open, Copy Path, Rescan This Folder (quickly
   recount one folder, for example after deleting something in the Finder), Scan Only This Folder.
+  The Rescan button in the toolbar rescans the selected folder; with the top folder selected, it
+  scans everything again.
 - Fast multithreaded scanning: `/Applications` with 350,000 files takes about a second. Progress is
   shown while scanning, and Stop ends the scan and shows what has been counted so far.
 - Scan a disk from the list, your home folder or any folder: with Choose Folder…, or by dropping a
@@ -59,8 +61,10 @@ xattr -dr com.apple.quarantine /Applications/FileTree.app
 
 macOS keeps apps out of some folders: Mail, Messages, Safari, the containers of other apps. Without
 permission FileTree shows such folders with ⚠︎ and the note “protected by macOS”, and their size
-is not included in the total. macOS also asks once for access to the Desktop, Documents and
-Downloads folders.
+is not included in the total. macOS also asks for access to the Desktop, Documents and Downloads
+folders, once, and to the data of other apps. It remembers the answer about the data of other apps
+only until FileTree quits, so that question comes back at every launch. With Full Disk Access
+macOS asks nothing.
 
 To measure everything:
 1. Put FileTree in the Applications folder (when building from source: `make install`).
@@ -151,7 +155,8 @@ Spotlight and Apps show only the copy installed in `/Applications`.
 - `Sources/FileTreeCore` is the engine without a user interface: reading folders with
   `getattrlistbulk`, parallel traversal, the volume rules (`ScanBoundary`), counting hard links and
   clones, statistics by file type. The tests are in `Tests/FileTreeCoreTests`.
-- `Sources/FileTree` is the AppKit app.
+- `Sources/FileTree` is the AppKit app. `Tests/FileTreeTests` checks, without opening windows, that
+  the commands of the menu bar and the toolbar reach the window controller.
 - `FileTree --benchmark <folder> [--depth N] [--threads N] [--exclude <folder>]` scans without a
   window and prints the time and the largest folders.
 - `FileTree <folder> --snapshot <directory> [--select <folder>] [--stop-after <seconds>]` drives the

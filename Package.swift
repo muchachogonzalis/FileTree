@@ -10,8 +10,9 @@ let package = Package(
     targets: [
         // Scanning engine and data model, no UI. Tested by FileTreeCoreTests.
         .target(name: "FileTreeCore"),
-        // The AppKit application.
+        // The AppKit application. Tested by FileTreeTests, without windows on the screen.
         .executableTarget(name: "FileTree", dependencies: ["FileTreeCore"]),
         .testTarget(name: "FileTreeCoreTests", dependencies: ["FileTreeCore"]),
+        .testTarget(name: "FileTreeTests", dependencies: ["FileTree"]),
     ]
 )

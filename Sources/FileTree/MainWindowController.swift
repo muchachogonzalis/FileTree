@@ -1,7 +1,7 @@
 import AppKit
 import FileTreeCore
 
-private extension NSToolbarItem.Identifier {
+extension NSToolbarItem.Identifier {
     static let chooseFolder = Self("chooseFolder")
     static let scanDisk = Self("scanDisk")
     static let rescan = Self("rescan")
@@ -251,6 +251,9 @@ final class MainWindowController: NSWindowController, NSWindowDelegate, NSToolba
 
     // MARK: Actions
 
+    // The commands of the menu bar and the toolbar. They have no target and reach this controller through the
+    // responder chain, so no view or view controller of the window may have an action of the same name.
+
     @objc func chooseFolder(_ sender: Any?) {
         guard let window else { return }
         let panel = NSOpenPanel()
@@ -355,20 +358,29 @@ final class MainWindowController: NSWindowController, NSWindowDelegate, NSToolba
 
     // MARK: NSToolbarDelegate
 
-    func toolbarDefaultItemIdentifiers(_ toolbar: NSToolbar) -> [NSToolbarItem.Identifier] {
+    /// The toolbar, left to right.
+    static let toolbarItemIdentifiers: [NSToolbarItem.Identifier] =
         [.chooseFolder, .scanDisk, .rescan, .stopScan, .flexibleSpace, .showInFinder]
+
+    func toolbarDefaultItemIdentifiers(_ toolbar: NSToolbar) -> [NSToolbarItem.Identifier] {
+        Self.toolbarItemIdentifiers
     }
 
     func toolbarAllowedItemIdentifiers(_ toolbar: NSToolbar) -> [NSToolbarItem.Identifier] {
-        toolbarDefaultItemIdentifiers(toolbar)
+        Self.toolbarItemIdentifiers
     }
 
     func toolbar(_ toolbar: NSToolbar, itemForItemIdentifier identifier: NSToolbarItem.Identifier,
                  willBeInsertedIntoToolbar flag: Bool) -> NSToolbarItem? {
+        Self.makeToolbarItem(identifier)
+    }
+
+    /// The buttons have no target: like the menu commands, they go up the responder chain to this controller.
+    static func makeToolbarItem(_ identifier: NSToolbarItem.Identifier) -> NSToolbarItem? {
         switch identifier {
         case .chooseFolder:
             return button(identifier, label: "Choose Folder", symbol: "folder.badge.plus",
-                          action: #selector(chooseFolder(_:)), toolTip: "Choose a folder to scan")
+                          action: #selector(MainWindowController.chooseFolder(_:)), toolTip: "Choose a folder to scan")
         case .scanDisk:
             let item = NSMenuToolbarItem(itemIdentifier: identifier)
             item.label = "Scan Disk"
@@ -378,21 +390,24 @@ final class MainWindowController: NSWindowController, NSWindowDelegate, NSToolba
             item.menu = VolumesMenu.shared.makeMenu()
             return item
         case .rescan:
-            return button(identifier, label: "Rescan", symbol: "arrow.clockwise",
-                          action: #selector(rescan(_:)), toolTip: "Scan the same folder again")
+            // With the top folder selected, everything is scanned again.
+            return button(identifier, label: "Rescan Selected Folder", symbol: "arrow.clockwise",
+                          action: #selector(MainWindowController.rescanSelectedFolder(_:)),
+                          toolTip: "Scan the selected folder again")
         case .stopScan:
             return button(identifier, label: "Stop", symbol: "stop.circle",
-                          action: #selector(stopScan(_:)), toolTip: "Stop scanning")
+                          action: #selector(MainWindowController.stopScan(_:)), toolTip: "Stop scanning")
         case .showInFinder:
             return button(identifier, label: "Show in Finder", symbol: "arrow.up.forward.app",
-                          action: #selector(showInFinder(_:)), toolTip: "Show the selected item in the Finder")
+                          action: #selector(MainWindowController.showInFinder(_:)),
+                          toolTip: "Show the selected item in the Finder")
         default:
             return nil
         }
     }
 
-    private func button(_ identifier: NSToolbarItem.Identifier, label: String, symbol: String, action: Selector,
-                        toolTip: String) -> NSToolbarItem {
+    private static func button(_ identifier: NSToolbarItem.Identifier, label: String, symbol: String, action: Selector,
+                               toolTip: String) -> NSToolbarItem {
         let item = NSToolbarItem(itemIdentifier: identifier)
         item.label = label
         item.paletteLabel = label

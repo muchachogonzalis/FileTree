@@ -66,8 +66,9 @@ final class SnapshotAutomation {
         save("5-file-types")
         results.details.selectTab(0)
 
-        if let folder = results.selectedFolder {
-            controller.rescanFolder(folder)
+        if results.selectedFolder != nil {
+            // The Rescan button, with the focus where the scan left it: in the tree.
+            click(.rescan)
             await waitUntil(seconds: 900) { !self.controller.isBusy }
             await waitUntil(seconds: 60) { results.details.contents.isLoaded }
             await pause(0.5)
@@ -78,6 +79,20 @@ final class SnapshotAutomation {
         await pause(1.0)
         save("7-sorted-by-name")
         results.tree.outlineView.sortDescriptors = [NSSortDescriptor(key: SortKey.allocated, ascending: false)]
+    }
+
+    /// Sends a toolbar button's command along the path of a click: from the focused view up through the views
+    /// and view controllers above it to the window and its delegate. Works whether the window is key or not.
+    private func click(_ identifier: NSToolbarItem.Identifier) {
+        guard let window = controller.window,
+              let item = window.toolbar?.items.first(where: { $0.itemIdentifier == identifier }), let action = item.action
+        else {
+            print("toolbar button \(identifier.rawValue) not found")
+            return
+        }
+        if window.firstResponder?.tryToPerform(action, with: item) != true {
+            print("toolbar button \(identifier.rawValue): nothing took its command")
+        }
     }
 
     private func folder(at path: String, in root: FolderNode) -> FolderNode? {
